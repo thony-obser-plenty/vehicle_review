@@ -95,12 +95,12 @@ $vehicleOperator1 = new VehicleOperator("John Doe");
 $vehicleOperator1->addVehicle(new FordMustang());
 $vehicleOperator1->addVehicle(new HarleyDavidson());
 
-$vehicleOperator2 = new VehicleOperator("Jane Smith");
-$vehicleOperator2->addVehicle(new Boeing747());
-
 foreach ($vehicleOperator1->getVehicles() as $vehicle) {
     echo $vehicle->operateVehicle($vehicleOperator1);
 }
+
+$vehicleOperator2 = new VehicleOperator("Jane Smith");
+$vehicleOperator2->addVehicle(new Boeing747());
 
 foreach ($vehicleOperator2->getVehicles() as $vehicle) {
     echo $vehicle->operateVehicle($vehicleOperator2);

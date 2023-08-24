@@ -2,63 +2,89 @@ package main
 
 import "fmt"
 
-// Vehicle interface represents a vehicle
-type Vehicle interface {
-	Drive() string
+type VehicleInterface interface {
+	operateVehicle(vehicleOperator VehicleOperator) string
 }
 
-// Car represents a car
-type Car struct{}
-
-// Drive implements the Drive method for Car
-func (c Car) Drive() string {
-	return "Driving a car"
+type MotorcycleInterface interface {
+	VehicleInterface
+	ride() string
 }
 
-// Motorcycle represents a motorcycle
-type Motorcycle struct{}
-
-// Drive implements the Drive method for Motorcycle
-func (m Motorcycle) Drive() string {
-	return "Riding a motorcycle"
+type CarInterface interface {
+	VehicleInterface
+	drive() string
 }
 
-// Airplane represents an airplane
-type Airplane struct{}
-
-// Drive implements the Drive method for Airplane
-func (a Airplane) Drive() string {
-	return "Flying an airplane"
+type AirplaneInterface interface {
+	VehicleInterface
+	fly() string
 }
 
-// Driver represents a driver
-type Driver struct {
+type FordMustang struct{}
+
+func (fordMustang FordMustang) drive() string {
+	return "driving a Ford Mustang"
+}
+
+func (fordMustang FordMustang) operateVehicle(vehicleOperator VehicleOperator) string {
+	return vehicleOperator.Name + " is " + fordMustang.drive()
+}
+
+type HarleyDavidson struct{}
+
+func (harleyDavidson HarleyDavidson) ride() string {
+	return "riding a Harley Davidson"
+}
+
+func (harleyDavidson HarleyDavidson) operateVehicle(vehicleOperator VehicleOperator) string {
+	return vehicleOperator.Name + " is " + harleyDavidson.ride()
+}
+
+type Boeing747 struct{}
+
+func (boeing747 Boeing747) fly() string {
+	return "flying a Boeing 747"
+}
+
+func (boeing747 Boeing747) operateVehicle(vehicleOperator VehicleOperator) string {
+	return vehicleOperator.Name + " is " + boeing747.fly()
+}
+
+type VehicleOperator struct {
 	Name     string
-	Vehicles []Vehicle
+	Vehicles []VehicleInterface
 }
 
-// DriveAll drives all vehicles owned by the driver
-func (d *Driver) DriveAll() {
-	for _, v := range d.Vehicles {
-		fmt.Printf("%s is %s.\n", d.Name, v.Drive())
-	}
+func (vehicleOperator VehicleOperator) getName() string {
+	return vehicleOperator.Name
 }
 
+func (vehicleOperator VehicleOperator) addVehicle(vehicle VehicleInterface) {
+	vehicleOperator.Vehicles = append(vehicleOperator.Vehicles, vehicle)
+}
+
+func (vehicleOperator VehicleOperator) getVehicles() []VehicleInterface {
+	return vehicleOperator.Vehicles
+}
+
+// there's still some kind of bug in here. I can't get it to print results.
 func main() {
-	car := Car{}
-	motorcycle := Motorcycle{}
-	airplane := Airplane{}
+	var driver1 VehicleOperator
+	driver1 = VehicleOperator{Name: "John Doe"}
 
-	driver1 := &Driver{
-		Name:     "John Doe",
-		Vehicles: []Vehicle{car, motorcycle},
+	driver1.addVehicle(CarInterface(FordMustang{}))
+	driver1.addVehicle(MotorcycleInterface(HarleyDavidson{}))
+
+	for _, vehicle := range driver1.getVehicles() {
+		fmt.Printf(vehicle.operateVehicle(driver1))
 	}
 
-	driver2 := &Driver{
-		Name:     "Jane Smith",
-		Vehicles: []Vehicle{motorcycle, airplane},
-	}
+	var driver2 VehicleOperator
+	driver2 = VehicleOperator{Name: "Jane Smith"}
+	driver2.addVehicle(AirplaneInterface(Boeing747{}))
 
-	driver1.DriveAll()
-	driver2.DriveAll()
+	for _, vehicle := range driver2.getVehicles() {
+		fmt.Println(vehicle.operateVehicle(driver2))
+	}
 }
