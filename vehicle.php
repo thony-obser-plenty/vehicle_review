@@ -15,22 +15,22 @@
 
 // This change is a lot about semantics. We could have just changed "drive()" to "operateVehicle()" but to be more semantically correct i've added interfaces for each vehicle type and an interface for the vehicle itself.
 interface vehicleInterface {
-    public function operateVehicle(VehicleOperator $driver);
+    public function operateVehicle(VehicleOperator $driver): string;
 }
 
 // Extended vehicle interface, as every vehicle can be operated. I doubt this would ever be optional.
 interface motorcycleInterface extends vehicleInterface {
-    public function ride();
+    public function ride(): string;
 }
 
 // Extended vehicle interface, as every vehicle can be operated. I doubt this would ever be optional.
 interface planeInterface extends vehicleInterface {
-    public function fly();
+    public function fly(): string;
 }
 
 // Extended vehicle interface, as every vehicle can be operated. I doubt this would ever be optional.
 interface carInterface extends vehicleInterface {
-    public function drive();
+    public function drive(): string;
 }
 
 // Added a more specific car, because carInterface already indicates that it's a car.
